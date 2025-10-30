@@ -46,14 +46,6 @@
       id="main-scene"
       mindar-image="imageTargetSrc: https://raw.githubusercontent.com/holi12325/archivos-webar/main/targets_cuadros.mind;
                        
-                       <!--
-                         OPTIMIZACIÓN DE TRACKING: 
-                         Tus valores de filterMinCF (0.005) y filterBeta (1000) eran extremadamente altos,
-                         lo que puede causar un "lag" o sobre-compensación. 
-                         He ajustado a valores más estándar de estabilización que suelen dar mejores resultados.
-                         Prueba con estos, y si sigue temblando, puedes probar a bajar filterMinCF (ej: 0.01) 
-                         y subir filterBeta (ej: 20 o 30).
-                       -->
                        filterMinCF: 0.1;
                        filterBeta: 10;
                        
@@ -61,10 +53,8 @@
                        warmupTolerance: 5;"
       color-space="sRGB"
       <!--
-        OPTIMIZACIÓN DE RENDERER:
-        'physicallyCorrectLights' es costoso y no parece necesario para tu escena
-        (que usa videos con 'shader: flat' y un modelo GLB).
-        Desactivarlo ahorra recursos de GPU.
+        Se desactiva 'physicallyCorrectLights' para ahorrar GPU,
+        ya que la escena usa 'shader: flat'.
       -->
       renderer="colorManagement: true; alpha: true"
       vr-mode-ui="enabled: false"
@@ -93,19 +83,15 @@
         />
 
         <!-- 
-          OPTIMIZACIÓN DE MEMORIA (Videos):
-          Añadido 'preload="metadata"' a TODOS los videos.
-          En lugar de cargar el video ENTERO en memoria al inicio (lo que consume muchísima RAM),
-          'metadata' solo carga la información básica (duración, dimensiones).
-          El video se descargará solo cuando se llame a .play() en el script.
-          Esto reducirá drásticamente el uso de memoria inicial y mejorará la fluidez general.
+          Se elimina 'preload="metadata"' para restaurar la fluidez
+          al detectar el target, volviendo al comportamiento de precarga
+          por defecto del navegador (similar a 'auto').
         -->
 
         <!-- Videos para Target 0 -->
         <video
           id="video-0-0"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index0_capa1_cielonocturno.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -116,7 +102,6 @@
         <video
           id="video-0-1"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index0_capa2_catedral.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -127,7 +112,6 @@
         <video
           id="video-0-2"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index0_capa3_personas.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -140,7 +124,6 @@
         <video
           id="video-1-0"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index1_capa1_playa.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -151,7 +134,6 @@
         <video
           id="video-1-1"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index1_capa2_algas.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -162,7 +144,6 @@
         <video
           id="video-1-2"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index1_capa3_peces.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -175,7 +156,6 @@
         <video
           id="video-2-0"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index2_capa2_hojitas.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -186,7 +166,6 @@
         <video
           id="video-2-1"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index2_capa3_hojitas2.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -197,7 +176,6 @@
         <video
           id="video-2-2"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index2_capa3_humo.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -210,7 +188,6 @@
         <video
           id="video-3-0"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index3_capa1_aliens.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -221,7 +198,6 @@
         <video
           id="video-3-1"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index3_capa2_plaza.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -232,7 +208,6 @@
         <video
           id="video-3-2"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index3_capa3_robot.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -245,7 +220,6 @@
         <video
           id="video-4-0"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index4_capa1_cielo.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -256,7 +230,6 @@
         <video
           id="video-4-1"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index4_capa2_aspis.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -267,7 +240,6 @@
         <video
           id="video-4-2"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index4_capa3_arbustos.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -280,7 +252,6 @@
         <video
           id="video-5-0"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index5_capa1_agua.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -291,7 +262,6 @@
         <video
           id="video-5-1"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index5_capa2_tierra.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -302,7 +272,6 @@
         <video
           id="video-5-2"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index5_capa3_barcos.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -315,7 +284,6 @@
         <video
           id="video-6-0"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index6_capa1_laguna.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -326,7 +294,6 @@
         <video
           id="video-6-1"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index6_capa2_arboles.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -337,7 +304,6 @@
         <video
           id="video-6-2"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index6_capa3_plantas.webm"
-          preload="metadata"
           loop
           muted
           playsinline
@@ -411,9 +377,6 @@
         Añadido 'smoothingFactor="0.5"' específico para este target.
         Esto aplica un suavizado adicional solo a este marcador, que es el que
         contiene el modelo 3D problemático. Ayudará a reducir el "temblequeo".
-        Puedes aumentar este valor (ej: 0.7) si sigue temblando mucho, 
-        pero cuidado, un valor muy alto (cercano a 1.0) hará que el modelo 
-        tarde en reaccionar al movimiento de la cámara.
       -->
       <a-entity
         id="target-2"
@@ -453,9 +416,8 @@
         ></a-plane>
         <!--
           OPTIMIZACIÓN Z-FIGHTING:
-          Este plano ('plane-2-2') y el anterior ('plane-2-1') estaban en la misma
-          posición Z (0.7), lo que causa "Z-fighting" (parpadeo) y gasta
-          recursos de GPU. Lo he movido ligeramente hacia adelante (0.75).
+          Movido ligeramente hacia adelante (0.75) para evitar
+          parpadeo con 'plane-2-1' (que está en 0.7).
         -->
         <a-plane
           id="plane-2-2"
@@ -590,8 +552,7 @@
       <!-- 
         El script JS está bien estructurado y maneja la lógica de
         mostrar/ocultar y pausar/reproducir correctamente.
-        No he hecho cambios aquí, ya que las optimizaciones principales
-        son de performance (assets y renderer) y de tracking (mindar).
+        No se necesitan cambios aquí.
       -->
       <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -751,5 +712,4 @@
     </a-scene>
   </body>
 </html>
-
 
