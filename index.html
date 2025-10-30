@@ -1,0 +1,685 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Librerías A-Frame y MindAR -->
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.0.0/dist/aframe-extras.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      /* UI para feedback de escaneo. Ahora se controla por JS. */
+      .scanning-ui {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        /* Se usa display: flex para centrar el contenido */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: sans-serif;
+        font-size: 1.2em;
+        text-align: center;
+        z-index: 10;
+        transition: opacity 0.5s;
+      }
+      /* Oculta el botón de VR de forma forzada */
+      .a-enter-vr-button {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- UI para mostrar mientras se escanea el target -->
+    <div id="scanning-ui" class="scanning-ui">
+      <p>Apunta la cámara a una de las obras...</p>
+    </div>
+
+    <a-scene
+      id="main-scene"
+      mindar-image="imageTargetSrc: https://raw.githubusercontent.com/holi12325/archivos-webar/main/targets_cuadros.mind; 
+                       filterMinCF: 0.005; 
+                       filterBeta: 1000; 
+                       missTolerance: 5; 
+                       warmupTolerance: 5;"
+      color-space="sRGB"
+      renderer="colorManagement: true; physicallyCorrectLights: true; alpha: true"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+      embedded
+    >
+      <!--  
+        ASSETS: Todos los recursos (imágenes, videos, modelos) se declaran aquí para que A-Frame los precargue.
+      -->
+      <a-assets>
+        <a-asset-item
+          id="trainModel"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/tren_index2.glb"
+        ></a-asset-item>
+
+        <!-- IMÁGENES PARA EL TARGET 2 -->
+        <img
+          id="imagen-tren"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index2_ilu1.jpg"
+          crossorigin="anonymous"
+        />
+        <img
+          id="imagen-tren-2"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index2_ilu2.png"
+          crossorigin="anonymous"
+        />
+
+        <!-- Videos para Target 0 -->
+        <video
+          id="video-0-0"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index0_capa1_cielonocturno.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+        <video
+          id="video-0-1"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index0_capa2_catedral.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+        <video
+          id="video-0-2"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index0_capa3_personas.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+
+        <!-- Videos para Target 1 -->
+        <video
+          id="video-1-0"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index1_capa1_playa.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+        <video
+          id="video-1-1"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index1_capa2_algas.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+        <video
+          id="video-1-2"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index1_capa3_peces.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+
+        <!-- Videos para Target 2 -->
+        <video
+          id="video-2-0"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index2_capa2_hojitas.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+        <video
+          id="video-2-1"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index2_capa3_hojitas2.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+        <video
+          id="video-2-2"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index2_capa3_humo.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+
+        <!-- Videos para Target 3 -->
+        <video
+          id="video-3-0"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index3_capa1_aliens.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+        <video
+          id="video-3-1"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index3_capa2_plaza.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+        <video
+          id="video-3-2"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index3_capa3_robot.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+
+        <!-- Videos para Target 4 -->
+        <video
+          id="video-4-0"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index4_capa1_cielo.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+        <video
+          id="video-4-1"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index4_capa2_aspis.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+        <video
+          id="video-4-2"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index4_capa3_arbustos.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+
+        <!-- Videos para Target 5 -->
+        <video
+          id="video-5-0"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index5_capa1_agua.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+        <video
+          id="video-5-1"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index5_capa2_tierra.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+        <video
+          id="video-5-2"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index5_capa3_barcos.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+
+        <!-- Videos para Target 6 -->
+        <video
+          id="video-6-0"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index6_capa1_laguna.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+        <video
+          id="video-6-1"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index6_capa2_arboles.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+        <video
+          id="video-6-2"
+          src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index6_capa3_plantas.webm"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          crossorigin="anonymous"
+          style="display: none"
+        ></video>
+      </a-assets>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <!-- Target 0 -->
+      <a-entity id="target-0" mindar-image-target="targetIndex: 0">
+        <a-plane
+          id="plane-0-0"
+          position="0 0 0"
+          height="1.104"
+          width="2"
+          visible="false"
+          material="shader: flat; src: #video-0-0; transparent: true;"
+        ></a-plane>
+        <a-plane
+          id="plane-0-1"
+          position="0 0 0.2"
+          height="1.104"
+          width="2"
+          visible="false"
+          material="shader: flat; src: #video-0-1; transparent: true;"
+        ></a-plane>
+        <a-plane
+          id="plane-0-2"
+          position="0 0 0.7"
+          height="1.104"
+          width="2"
+          visible="false"
+          material="shader: flat; src: #video-0-2; transparent: true;"
+        ></a-plane>
+      </a-entity>
+
+      <!-- Target 1 -->
+      <a-entity id="target-1" mindar-image-target="targetIndex: 1">
+        <a-plane
+          id="plane-1-0"
+          position="0 0 0"
+          height="2"
+          width="1.602"
+          visible="false"
+          material="shader: flat; src: #video-1-0; transparent: true;"
+        ></a-plane>
+        <a-plane
+          id="plane-1-1"
+          position="0 0 0.2"
+          height="1.5"
+          width="2.662"
+          visible="false"
+          material="shader: flat; src: #video-1-1; transparent: true;"
+        ></a-plane>
+        <a-plane
+          id="plane-1-2"
+          position="0 0 0.7"
+          height="1.604"
+          width="2"
+          visible="false"
+          material="shader: flat; src: #video-1-2; transparent: true;"
+        ></a-plane>
+      </a-entity>
+
+      <!-- Target 2 (El tren) -->
+      <a-entity id="target-2" mindar-image-target="targetIndex: 2">
+        <a-plane
+          id="train-image-plane"
+          src="#imagen-tren"
+          position="0 0 -0.2"
+          height="1.6"
+          width="1"
+          visible="false"
+        ></a-plane>
+        <a-plane
+          id="train-image-plane-2"
+          src="#imagen-tren-2"
+          position="0 0 0.3"
+          height="1.6"
+          width="1"
+          visible="false"
+        ></a-plane>
+        <a-plane
+          id="plane-2-0"
+          position="0 0 0.5"
+          height="1.506"
+          width="1.5"
+          visible="false"
+          material="shader: flat; src: #video-2-0; transparent: true;"
+        ></a-plane>
+        <a-plane
+          id="plane-2-1"
+          position="0 0 0.7"
+          height="1.67"
+          width="1"
+          visible="false"
+          material="shader: flat; src: #video-2-1; transparent: true;"
+        ></a-plane>
+        <a-plane
+          id="plane-2-2"
+          position="0 0 0.7"
+          height="1.67"
+          width="1"
+          visible="false"
+          material="shader: flat; src: #video-2-2; transparent: true;"
+        ></a-plane>
+        <a-gltf-model
+          id="trainModelEntity"
+          src="#trainModel"
+          scale="0.1 0.1 0.1"
+          position="0 -0.1 0"
+          rotation="0 0 0"
+          visible="false"
+        ></a-gltf-model>
+      </a-entity>
+
+      <!-- Target 3 -->
+      <a-entity id="target-3" mindar-image-target="targetIndex: 3">
+        <a-plane
+          id="plane-3-0"
+          position="0 0 0"
+          height="1.104"
+          width="2"
+          visible="false"
+          material="shader: flat; src: #video-3-0; transparent: true;"
+        ></a-plane>
+        <a-plane
+          id="plane-3-1"
+          position="0 0 0.4"
+          height="1.104"
+          width="2"
+          visible="false"
+          material="shader: flat; src: #video-3-1; transparent: true;"
+        ></a-plane>
+        <a-plane
+          id="plane-3-2"
+          position="0 0 0.7"
+          height="1.104"
+          width="2"
+          visible="false"
+          material="shader: flat; src: #video-3-2; transparent: true;"
+        ></a-plane>
+      </a-entity>
+
+      <!-- Target 4 -->
+      <a-entity id="target-4" mindar-image-target="targetIndex: 4">
+        <a-plane
+          id="plane-4-0"
+          position="0 0 0"
+          height="2"
+          width="1.104"
+          visible="false"
+          material="shader: flat; src: #video-4-0; transparent: true;"
+        ></a-plane>
+        <a-plane
+          id="plane-4-1"
+          position="0 0 0.4"
+          height="2"
+          width="1.104"
+          visible="false"
+          material="shader: flat; src: #video-4-1; transparent: true;"
+        ></a-plane>
+        <a-plane
+          id="plane-4-2"
+          position="0 0 0.7"
+          height="2"
+          width="1.104"
+          visible="false"
+          material="shader: flat; src: #video-4-2; transparent: true;"
+        ></a-plane>
+      </a-entity>
+
+      <!-- Target 5 -->
+      <a-entity id="target-5" mindar-image-target="targetIndex: 5">
+        <a-plane
+          id="plane-5-0"
+          position="0 0 0"
+          height="1.5"
+          width="1.5"
+          visible="false"
+          material="shader: flat; src: #video-5-0; transparent: true;"
+        ></a-plane>
+        <a-plane
+          id="plane-5-1"
+          position="0 0 0.4"
+          height="1.5"
+          width="1.5"
+          visible="false"
+          material="shader: flat; src: #video-5-1; transparent: true;"
+        ></a-plane>
+        <a-plane
+          id="plane-5-2"
+          position="0 0 0.7"
+          height="1.5"
+          width="1.5"
+          visible="false"
+          material="shader: flat; src: #video-5-2; transparent: true;"
+        ></a-plane>
+      </a-entity>
+
+      <!-- Target 6 -->
+      <a-entity id="target-6" mindar-image-target="targetIndex: 6">
+        <a-plane
+          id="plane-6-0"
+          position="0 0 0"
+          height="1.104"
+          width="2"
+          visible="false"
+          material="shader: flat; src: #video-6-0; transparent: true;"
+        ></a-plane>
+        <a-plane
+          id="plane-6-1"
+          position="0 0 0.2"
+          height="1.104"
+          width="2"
+          visible="false"
+          material="shader: flat; src: #video-6-1; transparent: true;"
+        ></a-plane>
+        <a-plane
+          id="plane-6-2"
+          position="0 0 0.7"
+          height="1.104"
+          width="2"
+          visible="false"
+          material="shader: flat; src: #video-6-2; transparent: true;"
+        ></a-plane>
+      </a-entity>
+
+      <!-- Script reestructurado para controlar la lógica -->
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const sceneEl = document.querySelector("#main-scene");
+          const scanningUI = document.querySelector("#scanning-ui");
+          let activeTargetIndex = null;
+          const numLayers = 3;
+          let trainTimeout = null;
+
+          const trainModel = document.querySelector("#trainModelEntity");
+          const smokePlane = document.querySelector("#plane-2-2");
+          const smokeVideo = document.querySelector("#video-2-2");
+
+          const startTrainPhase = () => {
+            smokePlane.setAttribute("visible", "false");
+            smokeVideo.pause();
+
+            trainModel.setAttribute("visible", "true");
+            // Se define y activa la animación al momento de mostrar el tren
+            trainModel.setAttribute("animation-mixer", {
+              clip: "*",
+              loop: "once",
+              clampWhenFinished: true,
+            });
+          };
+
+          const startSmokePhase = () => {
+            trainModel.setAttribute("visible", "false");
+            // Se quita el componente de animación para asegurar que se reinicie bien
+            trainModel.removeAttribute("animation-mixer");
+
+            smokePlane.setAttribute("visible", "true");
+            smokeVideo.currentTime = 0;
+            smokeVideo.play();
+
+            clearTimeout(trainTimeout);
+            trainTimeout = setTimeout(startTrainPhase, 2000);
+          };
+
+          const onTrainAnimationFinished = () => {
+            // Solo reinicia el ciclo si el target sigue activo
+            if (activeTargetIndex === 2) {
+              startSmokePhase();
+            }
+          };
+
+          const showTarget = (targetIndex) => {
+            scanningUI.style.display = "none";
+
+            if (
+              activeTargetIndex !== null &&
+              activeTargetIndex !== targetIndex
+            ) {
+              hideTarget(activeTargetIndex);
+            }
+            activeTargetIndex = targetIndex;
+            
+            // Ya no se necesita el overlay, se eliminaron las líneas que lo manejaban
+
+            for (let i = 0; i < numLayers; i++) {
+              const video = document.querySelector(
+                `#video-${targetIndex}-${i}`
+              );
+              const plane = document.querySelector(
+                `#plane-${targetIndex}-${i}`
+              );
+              if (video && plane) {
+                plane.setAttribute("visible", "true");
+                video.play();
+              }
+            }
+
+            if (targetIndex === 2) {
+              document
+                .querySelector("#train-image-plane")
+                .setAttribute("visible", "true");
+              document
+                .querySelector("#train-image-plane-2")
+                .setAttribute("visible", "true");
+
+              // Se asegura de quitar cualquier listener antiguo antes de agregar uno nuevo
+              trainModel.removeEventListener(
+                "animation-finished",
+                onTrainAnimationFinished
+              );
+              trainModel.addEventListener(
+                "animation-finished",
+                onTrainAnimationFinished
+              );
+
+              // Inicia el ciclo
+              startSmokePhase();
+            }
+          };
+
+          const hideTarget = (targetIndex) => {
+
+            // Ya no se necesita el overlay, se eliminaron las líneas que lo manejaban
+
+            for (let i = 0; i < numLayers; i++) {
+              const video = document.querySelector(
+                `#video-${targetIndex}-${i}`
+              );
+              const plane = document.querySelector(
+                `#plane-${targetIndex}-${i}`
+              );
+              if (video && plane) {
+                plane.setAttribute("visible", "false");
+                video.pause();
+                video.currentTime = 0;
+              }
+            }
+
+            if (targetIndex === 2) {
+              document
+                .querySelector("#train-image-plane")
+                .setAttribute("visible", "false");
+              document
+                .querySelector("#train-image-plane-2")
+                .setAttribute("visible", "false");
+
+              // Detiene el ciclo y limpia todo
+              clearTimeout(trainTimeout);
+              trainModel.setAttribute("visible", "false");
+              smokePlane.setAttribute("visible", "false");
+              smokeVideo.pause();
+
+              // Quita el componente de animación y el listener
+              trainModel.removeAttribute("animation-mixer");
+              trainModel.removeEventListener(
+                "animation-finished",
+                onTrainAnimationFinished
+              );
+            }
+          };
+
+          sceneEl.addEventListener("loaded", () => {
+            for (let i = 0; i <= 6; i++) {
+              const entity = document.querySelector(`#target-${i}`);
+
+              entity.addEventListener("targetFound", () => {
+                console.log(`Target ${i} encontrado`);
+                showTarget(i);
+              });
+
+              entity.addEventListener("targetLost", () => {
+                console.log(`Target ${i} perdido`);
+                if (activeTargetIndex === i) {
+                  hideTarget(i);
+                  activeTargetIndex = null;
+                  scanningUI.style.display = "flex";
+                }
+              });
+            }
+          });
+        });
+      </script>
+    </a-scene>
+  </body>
+</html>
