@@ -2,8 +2,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <!-- Librerías A-Frame y MindAR -->
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <!-- Librerías A-Frame y MindAR --><script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.0.0/dist/aframe-extras.min.js"></script>
     <style>
@@ -37,41 +36,32 @@
     </style>
   </head>
   <body>
-    <!-- UI para mostrar mientras se escanea el target -->
-    <div id="scanning-ui" class="scanning-ui">
+    <!-- UI para mostrar mientras se escanea el target --><div id="scanning-ui" class="scanning-ui">
       <p>Apunta la cámara a una de las obras...</p>
     </div>
 
-    <a-scene
+    <!-- 
+      ATENCIÓN: Se ha reescrito la declaración de a-scene para evitar que los atributos
+      se muestren como texto en pantalla y para ajustar los parámetros de MindAR
+      y el renderer de forma más robusta.
+    --><a-scene
       id="main-scene"
-      mindar-image="imageTargetSrc: https://raw.githubusercontent.com/holi12325/archivos-webar/main/targets_cuadros.mind;
-                       
-                       filterMinCF: 0.1;
-                       filterBeta: 10;
-                       
-                       missTolerance: 5;
-                       warmupTolerance: 5;"
+      mindar-image="imageTargetSrc: https://raw.githubusercontent.com/holi12325/archivos-webar/main/targets_cuadros.mind; filterMinCF: 0.005; filterBeta: 1000; missTolerance: 5; warmupTolerance: 5;"
       color-space="sRGB"
-      <!--
-        Se desactiva 'physicallyCorrectLights' para ahorrar GPU,
-        ya que la escena usa 'shader: flat'.
-      -->
-      renderer="colorManagement: true; alpha: true"
+      renderer="colorManagement: true; alpha: true; physicallyCorrectLights: false;"
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
       embedded
     >
       <!-- 
         ASSETS: Todos los recursos (imágenes, videos, modelos) se declaran aquí para que A-Frame los precargue.
-      -->
-      <a-assets>
+      --><a-assets>
         <a-asset-item
           id="trainModel"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/tren_index2.glb"
         ></a-asset-item>
 
-        <!-- IMÁGENES PARA EL TARGET 2 -->
-        <img
+        <!-- IMÁGENES PARA EL TARGET 2 --><img
           id="imagen-tren"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index2_ilu1.jpg"
           crossorigin="anonymous"
@@ -82,14 +72,7 @@
           crossorigin="anonymous"
         />
 
-        <!-- 
-          Se elimina 'preload="metadata"' para restaurar la fluidez
-          al detectar el target, volviendo al comportamiento de precarga
-          por defecto del navegador (similar a 'auto').
-        -->
-
-        <!-- Videos para Target 0 -->
-        <video
+        <!-- Videos para Target 0 --><video
           id="video-0-0"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index0_capa1_cielonocturno.webm"
           loop
@@ -120,8 +103,7 @@
           style="display: none"
         ></video>
 
-        <!-- Videos para Target 1 -->
-        <video
+        <!-- Videos para Target 1 --><video
           id="video-1-0"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index1_capa1_playa.webm"
           loop
@@ -152,8 +134,7 @@
           style="display: none"
         ></video>
 
-        <!-- Videos para Target 2 -->
-        <video
+        <!-- Videos para Target 2 --><video
           id="video-2-0"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index2_capa2_hojitas.webm"
           loop
@@ -184,8 +165,7 @@
           style="display: none"
         ></video>
 
-        <!-- Videos para Target 3 -->
-        <video
+        <!-- Videos para Target 3 --><video
           id="video-3-0"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index3_capa1_aliens.webm"
           loop
@@ -216,8 +196,7 @@
           style="display: none"
         ></video>
 
-        <!-- Videos para Target 4 -->
-        <video
+        <!-- Videos para Target 4 --><video
           id="video-4-0"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index4_capa1_cielo.webm"
           loop
@@ -248,8 +227,7 @@
           style="display: none"
         ></video>
 
-        <!-- Videos para Target 5 -->
-        <video
+        <!-- Videos para Target 5 --><video
           id="video-5-0"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index5_capa1_agua.webm"
           loop
@@ -280,8 +258,7 @@
           style="display: none"
         ></video>
 
-        <!-- Videos para Target 6 -->
-        <video
+        <!-- Videos para Target 6 --><video
           id="video-6-0"
           src="https://raw.githubusercontent.com/holi12325/uss-web-ar/main/index6_capa1_laguna.webm"
           loop
@@ -315,8 +292,7 @@
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-      <!-- Target 0 -->
-      <a-entity id="target-0" mindar-image-target="targetIndex: 0">
+      <!-- Target 0 --><a-entity id="target-0" mindar-image-target="targetIndex: 0">
         <a-plane
           id="plane-0-0"
           position="0 0 0"
@@ -343,8 +319,7 @@
         ></a-plane>
       </a-entity>
 
-      <!-- Target 1 -->
-      <a-entity id="target-1" mindar-image-target="targetIndex: 1">
+      <!-- Target 1 --><a-entity id="target-1" mindar-image-target="targetIndex: 1">
         <a-plane
           id="plane-1-0"
           position="0 0 0"
@@ -371,14 +346,9 @@
         ></a-plane>
       </a-entity>
 
-      <!-- Target 2 (El tren) -->
-      <!--
-        OPTIMIZACIÓN DE SUAVIZADO (JITTER):
-        Añadido 'smoothingFactor="0.5"' específico para este target.
-        Esto aplica un suavizado adicional solo a este marcador, que es el que
-        contiene el modelo 3D problemático. Ayudará a reducir el "temblequeo".
-      -->
-      <a-entity
+      <!-- Target 2 (El tren) --><!--
+        Se mantiene el 'smoothingFactor' para ayudar a estabilizar el modelo 3D del tren.
+      --><a-entity
         id="target-2"
         mindar-image-target="targetIndex: 2; smoothingFactor: 0.5"
       >
@@ -418,8 +388,7 @@
           OPTIMIZACIÓN Z-FIGHTING:
           Movido ligeramente hacia adelante (0.75) para evitar
           parpadeo con 'plane-2-1' (que está en 0.7).
-        -->
-        <a-plane
+        --><a-plane
           id="plane-2-2"
           position="0 0 0.75"
           height="1.67"
@@ -437,8 +406,7 @@
         ></a-gltf-model>
       </a-entity>
 
-      <!-- Target 3 -->
-      <a-entity id="target-3" mindar-image-target="targetIndex: 3">
+      <!-- Target 3 --><a-entity id="target-3" mindar-image-target="targetIndex: 3">
         <a-plane
           id="plane-3-0"
           position="0 0 0"
@@ -465,8 +433,7 @@
         ></a-plane>
       </a-entity>
 
-      <!-- Target 4 -->
-      <a-entity id="target-4" mindar-image-target="targetIndex: 4">
+      <!-- Target 4 --><a-entity id="target-4" mindar-image-target="targetIndex: 4">
         <a-plane
           id="plane-4-0"
           position="0 0 0"
@@ -493,8 +460,7 @@
         ></a-plane>
       </a-entity>
 
-      <!-- Target 5 -->
-      <a-entity id="target-5" mindar-image-target="targetIndex: 5">
+      <!-- Target 5 --><a-entity id="target-5" mindar-image-target="targetIndex: 5">
         <a-plane
           id="plane-5-0"
           position="0 0 0"
@@ -521,8 +487,7 @@
         ></a-plane>
       </a-entity>
 
-      <!-- Target 6 -->
-      <a-entity id="target-6" mindar-image-target="targetIndex: 6">
+      <!-- Target 6 --><a-entity id="target-6" mindar-image-target="targetIndex: 6">
         <a-plane
           id="plane-6-0"
           position="0 0 0"
@@ -549,11 +514,6 @@
         ></a-plane>
       </a-entity>
 
-      <!-- 
-        El script JS está bien estructurado y maneja la lógica de
-        mostrar/ocultar y pausar/reproducir correctamente.
-        No se necesitan cambios aquí.
-      -->
       <script>
         document.addEventListener("DOMContentLoaded", () => {
           const sceneEl = document.querySelector("#main-scene");
@@ -571,7 +531,6 @@
             smokeVideo.pause();
 
             trainModel.setAttribute("visible", "true");
-            // Se define y activa la animación al momento de mostrar el tren
             trainModel.setAttribute("animation-mixer", {
               clip: "*",
               loop: "once",
@@ -581,7 +540,6 @@
 
           const startSmokePhase = () => {
             trainModel.setAttribute("visible", "false");
-            // Se quita el componente de animación para asegurar que se reinicie bien
             trainModel.removeAttribute("animation-mixer");
 
             smokePlane.setAttribute("visible", "true");
@@ -593,7 +551,6 @@
           };
 
           const onTrainAnimationFinished = () => {
-            // Solo reinicia el ciclo si el target sigue activo
             if (activeTargetIndex === 2) {
               startSmokePhase();
             }
@@ -609,8 +566,6 @@
               hideTarget(activeTargetIndex);
             }
             activeTargetIndex = targetIndex;
-
-            // Ya no se necesita el overlay, se eliminaron las líneas que lo manejaban
 
             for (let i = 0; i < numLayers; i++) {
               const video = document.querySelector(
@@ -633,7 +588,6 @@
                 .querySelector("#train-image-plane-2")
                 .setAttribute("visible", "true");
 
-              // Se asegura de quitar cualquier listener antiguo antes de agregar uno nuevo
               trainModel.removeEventListener(
                 "animation-finished",
                 onTrainAnimationFinished
@@ -643,14 +597,11 @@
                 onTrainAnimationFinished
               );
 
-              // Inicia el ciclo
               startSmokePhase();
             }
           };
 
           const hideTarget = (targetIndex) => {
-            // Ya no se necesita el overlay, se eliminaron las líneas que lo manejaban
-
             for (let i = 0; i < numLayers; i++) {
               const video = document.querySelector(
                 `#video-${targetIndex}-${i}`
@@ -673,13 +624,11 @@
                 .querySelector("#train-image-plane-2")
                 .setAttribute("visible", "false");
 
-              // Detiene el ciclo y limpia todo
               clearTimeout(trainTimeout);
               trainModel.setAttribute("visible", "false");
               smokePlane.setAttribute("visible", "false");
               smokeVideo.pause();
 
-              // Quita el componente de animación y el listener
               trainModel.removeAttribute("animation-mixer");
               trainModel.removeEventListener(
                 "animation-finished",
